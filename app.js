@@ -31,9 +31,7 @@ function run() {
     let row = []
     for (let x = 0; x < canvas.width; x++) {
       const red = pixels.data[(y * 4 * pixels.width) + (x * 4)]
-      const green = pixels.data[(y * 4 * pixels.width) + (x * 4) + 1]
-      const blue = pixels.data[(y * 4 * pixels.width) + (x * 4) + 2]
-      const brightness = calculateRelativeBrightness(red, green, blue)
+      const brightness = red / 255
       row.push(brightness)
     }
     mappedImage.push(row)
@@ -41,17 +39,11 @@ function run() {
 
   console.log(mappedImage)
 
-  function calculateRelativeBrightness(r, g, b) {
-    return Math.sqrt(r * r * 0.299 + g * g * 0.587 + b * b * 0.114) / 100
-    //return (r + g + b) / 3 / 255
-  }
-
   const update = (particle) => {
     const { x, y } = particle
     particle.brightness = mappedImage[Math.floor(y)][Math.floor(x)]
 
     particle.y += (2.5 - particle.brightness) + particle.velocity
-
 
     if (particle.y >= canvas.height) {
       particle.y = 0
