@@ -10,14 +10,39 @@ document.body.append(canvas)
 const ctx = canvas.getContext('2d')
 
 function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
   ctx.drawImage(bkgImg, 0, 0, canvas.width, canvas.height)
 
   const rayStartA = Math.PI * 0.2
   const rayEndA = rayStartA + Math.PI * 0.65
   const step = 0.05
+  ctx.save()
+  ctx.globalAlpha = state.opacity
+
   for (let a = rayStartA; a < rayEndA; a += step) {
+    const blurOpacity1 = state.opacity * 0.6
+    const blurOpacity2 = state.opacity * 0.3
+    const blurAngleDeviation = 0.03
     drawRay(a)
+    ctx.save()
+    ctx.globalAlpha = blurOpacity1
+    drawRay(a + step * blurAngleDeviation)
+    drawRay(a - step * blurAngleDeviation)
+    ctx.restore()
+
+    ctx.save()
+    ctx.globalAlpha = blurOpacity2
+    drawRay(a + step * blurAngleDeviation * 2)
+    drawRay(a - step * blurAngleDeviation * 2)
+    ctx.restore()
   }
+  ctx.restore()
+
+}
+
+let state = {
+  opacity: 0,
+  step: 0.01,
 }
 
 function drawRay(angle) {
@@ -28,9 +53,8 @@ function drawRay(angle) {
   const ex = r * Math.cos(angle) + cx
   const ey = r * Math.sin(angle) + cy
 
-  const rayWidth = 15
+  const rayWidth = 10
 
-  ctx.filter = "blur(5px)";
   ctx.fillStyle = 'white'
   ctx.beginPath();
   ctx.moveTo(cx, cy);
@@ -40,6 +64,12 @@ function drawRay(angle) {
   ctx.fill();
 }
 
+function animate() {
+  state.opacity += state.step
+  if (state.opacity >= 0.7 || state.opacity <= 0 - state.step) state.step *= -1
+  draw()
 
+  requestAnimationFrame(animate)
+}
 
-bkgImg.onload = draw
+bkgImg.onload = animate
