@@ -1,91 +1,44 @@
-const imgWidth = 400
-const imgHeight = 505
+const bkgImg = new Image('img')
+bkgImg.src = './paradise-lost.jpeg'
+
 const canvas = document.createElement('canvas')
-canvas.width = imgWidth
-canvas.height = imgHeight
+canvas.setAttribute('width', window.innerWidth)
+canvas.setAttribute('height', window.innerHeight)
+
 document.body.append(canvas)
-
-const image = new Image()
-
-image.src = 'paradise-lost.jpg'
 
 const ctx = canvas.getContext('2d')
 
-image.addEventListener('load', run)
+function draw() {
+  ctx.drawImage(bkgImg, 0, 0, canvas.width, canvas.height)
 
-function run() {
-  ctx.drawImage(image, 0, 0, imgWidth, imgHeight)
-  const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height)
-  ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-  const numParticles = 5000
-  const particles = []
-
-  let mappedImage = []
-
-  console.log(pixels.width)
-
-  console.log(pixels)
-
-  for (let y = 0; y < canvas.height; y++) {
-    let row = []
-    for (let x = 0; x < canvas.width; x++) {
-      const red = pixels.data[(y * 4 * pixels.width) + (x * 4)]
-      const brightness = red / 255
-      row.push(brightness)
-    }
-    mappedImage.push(row)
+  const rayStartA = Math.PI * 0.2
+  const rayEndA = rayStartA + Math.PI * 0.65
+  const step = 0.05
+  for (let a = rayStartA; a < rayEndA; a += step) {
+    drawRay(a)
   }
+}
 
-  console.log(mappedImage)
+function drawRay(angle) {
+  const cx = canvas.width / 2 + 50
+  const cy = -100
 
-  const update = (particle) => {
-    const { x, y } = particle
-    particle.brightness = mappedImage[Math.floor(y)][Math.floor(x)]
+  const r = canvas.height * 1.5
+  const ex = r * Math.cos(angle) + cx
+  const ey = r * Math.sin(angle) + cy
 
-    particle.y += (2.5 - particle.brightness) + particle.velocity
+  const rayWidth = 5
 
-    if (particle.y >= canvas.height) {
-      particle.y = 0
-      particle.x = Math.random() * canvas.width
-    }
-  }
-
-  const draw = (particle) => {
-    ctx.beginPath()
-    ctx.fillStyle = 'white'
-    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
-    ctx.fill()
-  }
-
-  function createParticles() {
-    for (let i = 0; i < numParticles; i++) {
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: 0,
-        speed: 0,
-        velocity: Math.random() * 0.5,
-        size: Math.random() * 1.5 + 1,
-      })
-    }
-  }
-
-  createParticles()
-
-  function animate() {
-    ctx.globalAlpha = 0.05
-    ctx.fillStyle = 'rgb(0, 0, 0)'
-    ctx.fillRect(0, 0, canvas.width, canvas.height)
-    ctx.globalAlpha = 0.2
-    for (const particle of particles) {
-      update(particle)
-      ctx.globalAlpha = particle.brightness * 0.5
-      draw(particle)
-    }
-    requestAnimationFrame(animate)
-  }
-  animate()
+  ctx.fillStyle = 'white'
+  ctx.beginPath();
+  ctx.moveTo(cx, cy);
+  ctx.lineTo(ex, ey);
+  ctx.lineTo(ex + rayWidth, ey);
+  ctx.lineTo(cx, cy);
+  ctx.fill();
 }
 
 
 
+bkgImg.onload = draw
