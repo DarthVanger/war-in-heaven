@@ -7,12 +7,14 @@ canvas.setAttribute('height', window.innerHeight)
 
 document.body.append(canvas)
 
-
 const ctx = canvas.getContext('2d')
 
 const r = canvas.height * 1.5
 const rayWidth = 50
 const blurAngleDeviation = rayWidth * 0.002
+const maxRayOpacity = 0.2
+const maxBlurOpacity1 = 0.7
+const maxBlurOpacity2 = 0.3
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -25,8 +27,8 @@ function draw() {
   ctx.globalAlpha = state.opacity
 
   for (let a = rayStartA; a < rayEndA; a += step) {
-    const blurOpacity1 = state.opacity * 0.6
-    const blurOpacity2 = state.opacity * 0.3
+    const blurOpacity1 = state.opacity * maxBlurOpacity1
+    const blurOpacity2 = state.opacity * maxBlurOpacity2
     drawRay(a)
     ctx.save()
     ctx.globalAlpha = blurOpacity1
@@ -67,7 +69,7 @@ function drawRay(angle) {
 }
 
 function animate() {
-  state.opacity = easeInOut(state.animationT) * 0.2
+  state.opacity = easeInOut(state.animationT) * maxRayOpacity
   state.animationT += state.step
   if (state.animationT >= 1 || state.animationT <= 0 - state.step) state.step *= -1
   draw()
