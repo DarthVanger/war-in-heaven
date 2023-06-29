@@ -28,8 +28,9 @@ function drawRay(angle) {
   const ex = r * Math.cos(angle) + cx
   const ey = r * Math.sin(angle) + cy
 
-  const rayWidth = 5
+  const rayWidth = 15
 
+  ctx.filter = "blur(5px)";
   ctx.fillStyle = 'white'
   ctx.beginPath();
   ctx.moveTo(cx, cy);
