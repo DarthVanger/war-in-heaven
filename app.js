@@ -46,7 +46,8 @@ function draw() {
 
 let state = {
   opacity: 0,
-  step: 0.002,
+  step: 0.01,
+  animationT: 0,
 }
 
 function drawRay(angle) {
@@ -66,11 +67,17 @@ function drawRay(angle) {
 }
 
 function animate() {
-  state.opacity += state.step
-  if (state.opacity >= 0.3 || state.opacity <= 0 - state.step) state.step *= -1
+  state.opacity = easeInOut(state.animationT) * 0.2
+  state.animationT += state.step
+  if (state.animationT >= 1 || state.animationT <= 0 - state.step) state.step *= -1
   draw()
 
   requestAnimationFrame(animate)
+}
+
+// https://stackoverflow.com/a/32854295/1657101
+function easeInOut(t){
+  return t > 0.5 ? 4*Math.pow((t-1),3)+1 : 4*Math.pow(t,3);
 }
 
 bkgImg.onload = animate
