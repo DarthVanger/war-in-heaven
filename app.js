@@ -26,8 +26,8 @@ function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
   ctx.drawImage(bkgImg, 0, 0, canvas.width, canvas.height)
 
-  const rayStartA = Math.PI * 0.2
-  const rayEndA = rayStartA + Math.PI * 0.65
+  const rayStartA = Math.PI * 0.3
+  const rayEndA = rayStartA + Math.PI * 0.4097
   const step = 0.03
   ctx.save()
   ctx.globalAlpha = state.opacity
@@ -59,7 +59,7 @@ let state = {
 }
 
 function drawRay(angle) {
-  const cx = canvas.width / 2 + 50
+  const cx = canvas.width / 2
   const cy = -100
 
   const ex = r * Math.cos(angle) + cx
@@ -76,7 +76,7 @@ function drawRay(angle) {
 
 function animate() {
   state.opacity = easeInOut(state.animationT) * maxRayOpacity
-  textOverlay.style.opacity = easeInOut(state.animationT)
+  textOverlay.style.opacity = easeInOut(state.animationT) * 0.8
 
   state.animationT += state.step
   if (state.animationT >= 1 || state.animationT <= 0 - state.step) state.step *= -1
