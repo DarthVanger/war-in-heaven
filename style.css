@@ -1,8 +1,17 @@
+@font-face {
+  font-family: 'Rubik';
+  src: url('fonts/RubikWetPaint-Regular.ttf')
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+body {
   background: black;
+  font-family: Rubik;
 }
 
 #bkg-img {
@@ -13,4 +22,39 @@ svg {
   position: absolute;
   left: 0;
   top: 0;
+}
+
+#text-overlay {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#text-overlay-inner {
+  text-align: center;
+}
+
+h1 {
+  font-size: 8em;
+}
+h2 {
+  font-size: 5em;
+  margin-bottom: 4rem;
+}
+
+#schedule-visit-btn {
+  width: 350px;
+  height: 150px;
+  margin: auto;
+  line-height: 150px;
+  background: black;
+  color: white;
+  font-size: 4em;
+  text-align: center;
 }

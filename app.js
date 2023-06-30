@@ -1,6 +1,12 @@
 const bkgImg = new Image('img')
 bkgImg.src = './paradise-lost.jpeg'
 
+const textOverlay = document.querySelector('#text-overlay')
+
+textOverlay.addEventListener('click', () => {
+  window.location = 'https://b804530.alteg.io/company/756080/menu'
+});
+
 const canvas = document.createElement('canvas')
 canvas.setAttribute('width', window.innerWidth)
 canvas.setAttribute('height', window.innerHeight)
@@ -70,6 +76,8 @@ function drawRay(angle) {
 
 function animate() {
   state.opacity = easeInOut(state.animationT) * maxRayOpacity
+  textOverlay.style.opacity = easeInOut(state.animationT)
+
   state.animationT += state.step
   if (state.animationT >= 1 || state.animationT <= 0 - state.step) state.step *= -1
   draw()
