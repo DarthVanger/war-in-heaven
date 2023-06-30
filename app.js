@@ -54,7 +54,7 @@ function draw() {
 
 let state = {
   opacity: 0,
-  step: 0.01,
+  step: 0.005,
   animationT: 0,
 }
 
