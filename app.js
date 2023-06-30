@@ -1,6 +1,9 @@
 const bkgImg = new Image('img')
 bkgImg.src = './paradise-lost.jpeg'
 
+let imgHeight;
+let imgWidth;
+
 const textOverlay = document.querySelector('#text-overlay')
 
 textOverlay.addEventListener('click', () => {
@@ -8,6 +11,7 @@ textOverlay.addEventListener('click', () => {
 });
 
 const canvas = document.createElement('canvas')
+
 canvas.setAttribute('width', window.innerWidth)
 canvas.setAttribute('height', window.innerHeight)
 
@@ -22,9 +26,12 @@ const maxRayOpacity = 0.2
 const maxBlurOpacity1 = 0.7
 const maxBlurOpacity2 = 0.3
 
+
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
-  ctx.drawImage(bkgImg, 0, 0, canvas.width, canvas.height)
+
+  ctx.drawImage(bkgImg, 0, 0, imgWidth, imgHeight)
+  
 
   const rayStartA = Math.PI * 0.3
   const rayEndA = rayStartA + Math.PI * 0.4097
@@ -90,4 +97,18 @@ function easeInOut(t){
   return t > 0.5 ? 4*Math.pow((t-1),3)+1 : 4*Math.pow(t,3);
 }
 
-bkgImg.onload = animate
+bkgImg.onload = run
+
+function run() {
+  const imgAspectRatio = bkgImg.naturalHeight / bkgImg.naturalWidth
+  console.log(imgAspectRatio);
+  let isLandscape = window.innerWidth > window.innerHeight
+  if (isLandscape) {
+    imgWidth = window.innerWidth;
+    imgHeight = imgWidth / imgAspectRatio;
+  } else {
+    imgHeight = window.innerHeight;
+    imgWidth = window.innerWidth;
+  }
+  animate()
+}
